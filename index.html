@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Meteorites & Wheat Yield Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+  <style>
+    body, html { margin: 0; padding: 0; height: 100%; }
+    #map { width: 100%; height: 100%; }
+
+    /* Draggable chart container */
+    #chartContainer {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 350px;
+      height: 350px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 8px;
+      padding: 5px;
+      z-index: 1000;
+      cursor: move;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      overflow: auto;
+    }
+
+    /* Dropdown and slider UI */
+    #controls {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      background: rgba(255,255,255,0.9);
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    #stats {
+      margin-top: 10px;
+      font-size: 12px;
+      background: #f7f7f7;
+      padding: 5px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Controls -->
+<div id="controls">
+  <label>Country:
+    <select id="countrySelect"></select>
+  </label>
+  <br>
+  <label>Year:
+    <input type="range" id="yearRange" min="1980" max="2020" value="1985">
+    <span id="selectedYear">1985</span>
+  </label>
+</div>
+
+<!-- Chart & stats -->
+<div id="chartContainer">
+  <!-- Task 7: Combo chart -->
+  <canvas id="wheatChart"></canvas>
+  <!-- Task 8: Scatter plot -->
+  <canvas id="scatterChart" style="margin-top:15px;"></canvas>
+  <!-- Task 9: Stats -->
+  <div id="stats"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="map.js"></script>
+
+<!-- Draggable chart JS -->
+<script>
+const chartContainer = document.getElementById("chartContainer");
+let isDragging = false;
+let offsetX, offsetY;
+
+chartContainer.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  offsetX = e.clientX - chartContainer.offsetLeft;
+  offsetY = e.clientY - chartContainer.offsetTop;
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (!isDragging) return;
+  chartContainer.style.left = e.clientX - offsetX + "px";
+  chartContainer.style.top = e.clientY - offsetY + "px";
+});
+
+document.addEventListener("mouseup", () => {
+  isDragging = false;
+});
+</script>
+
+</body>
+</html>
